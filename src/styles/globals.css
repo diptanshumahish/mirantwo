@@ -1,0 +1,547 @@
+/* ==========================================================================
+   Mirania II — design system
+
+   A House-of-Honey-shaped system: warm brown/blush ground, an editorial serif
+   set in caps, a neo-grotesque for everything functional, and one loud honey
+   accent that only ever appears as oversized marquee type or a hover state.
+
+   Spacing is expressed in raw pixels (the reference system's `--spacing` unit
+   is 1px), and the type scale is fluid between a 375px and a 1600px viewport.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Fonts
+   -------------------------------------------------------------------------- */
+
+/* Display — oversized marquee type and the hero wordmark. */
+@font-face {
+  font-family: "Bodoni Moda";
+  src: url("/fonts/BodoniModa.woff2") format("woff2-variations");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Editorial serif — every headline, always uppercase. */
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/fonts/InstrumentSerif-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/fonts/InstrumentSerif-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Grotesque — navigation, captions, body, controls. */
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/Switzer-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/Switzer-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/Switzer-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --------------------------------------------------------------------------
+   Palette
+   -------------------------------------------------------------------------- */
+
+:root {
+  --base-cream: #fff8ef;
+  --base-blush: #edccbe;
+  --base-orange: #ffeacf;
+  --base-dark-brown: #331917;
+  --base-dark-green: #003933;
+  --base-light-green: #d8ce7e;
+  --base-red: #d1410f;
+  --accent-honey: #edbc00;
+  --accent-lime: #aff552;
+  --accent-pink: #fc72c4;
+  --white: #ffffff;
+  --error: #d41203;
+
+  /* Theme slots. Every surface reads from these four, never the base names,
+     so a `data-theme` on <html> re-skins a whole page. */
+  --bg-primary: var(--base-dark-brown);
+  --text-primary: var(--base-blush);
+  --bg-secondary: var(--base-blush);
+  --text-secondary: var(--base-dark-brown);
+  --accent: var(--accent-honey);
+  --on-accent: var(--base-dark-brown);
+}
+
+[data-theme="summer"] {
+  --bg-primary: var(--base-dark-brown);
+  --text-primary: var(--base-orange);
+  --bg-secondary: var(--base-orange);
+  --text-secondary: var(--base-dark-brown);
+  --accent: var(--accent-honey);
+  --on-accent: var(--base-dark-brown);
+}
+
+[data-theme="fall"] {
+  --bg-primary: var(--base-red);
+  --text-primary: var(--base-orange);
+  --bg-secondary: var(--base-orange);
+  --text-secondary: var(--base-red);
+  --accent: var(--accent-honey);
+  --on-accent: var(--base-dark-brown);
+}
+
+/* Lime on the light-green ground is muddy at marquee scale, so spring pairs
+   the dark green with cream and keeps the lime for accents only. */
+[data-theme="spring"] {
+  --bg-primary: var(--base-dark-green);
+  --text-primary: var(--base-cream);
+  --bg-secondary: var(--base-cream);
+  --text-secondary: var(--base-dark-green);
+  --accent: var(--accent-lime);
+  --on-accent: var(--base-dark-green);
+}
+
+/* --------------------------------------------------------------------------
+   Fluid type scale
+   Interpolates linearly between a 375px and a 1600px viewport, clamped at both
+   ends. `--fluid` is a length: 0px at 375, 1px at 1600.
+   -------------------------------------------------------------------------- */
+
+:root {
+  --fluid: calc((100vw - 375px) / 1225);
+
+  --title-100: clamp(250px, calc(250px + 330 * var(--fluid)), 580px);
+  --title-60: clamp(56px, calc(56px + 44 * var(--fluid)), 100px);
+  --title-40: clamp(40px, calc(40px + 24 * var(--fluid)), 64px);
+  --title-20: clamp(24px, calc(24px + 24 * var(--fluid)), 48px);
+  --title-10: clamp(24px, calc(24px + 8 * var(--fluid)), 32px);
+
+  --subtitle-30: clamp(18px, calc(18px + 4 * var(--fluid)), 22px);
+  --subtitle-20: clamp(18px, calc(18px + 2 * var(--fluid)), 20px);
+  --body-30: clamp(16px, calc(16px + 2 * var(--fluid)), 18px);
+  --body-20: clamp(14px, calc(14px + 2 * var(--fluid)), 16px);
+  --caption-30: clamp(12px, calc(12px + 4 * var(--fluid)), 16px);
+
+  --font-display: "Bodoni Moda", ui-serif, Georgia, serif;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-sans: "Switzer", -apple-system, "Helvetica Neue", Arial, sans-serif;
+
+  /* Page gutter — deliberately hairline, so images run almost edge to edge.
+     Everything on the page, the navigation bar included, aligns to it. */
+  --gutter: 8px;
+
+  /* One vertical rhythm, used everywhere instead of ad-hoc pixel values. */
+  --space-3xs: 8px;
+  --space-2xs: 12px;
+  --space-xs: 16px;
+  --space-sm: 24px;
+  --space-md: 32px;
+  --space-lg: 48px;
+  --space-xl: 72px;
+  --space-2xl: 96px;
+
+  /* Section padding: one step up from `--space-2xl` on wide viewports. */
+  --section-y: 72px;
+
+  --ease: cubic-bezier(0.7, 0, 0.25, 1);
+  --dur: 400ms;
+  --nav-h: 64px;
+  --measure: 1054px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --section-y: 96px;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --section-y: 144px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reset
+   -------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--body-20);
+  line-height: 1.3;
+  font-weight: 400;
+  overflow-x: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+/* Author `display` beats the UA's `[hidden]` rule regardless of specificity,
+   so anything hidden by attribute has to be enforced here. */
+[hidden] {
+  display: none !important;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 400;
+}
+
+p,
+ul,
+ol,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+:where(a[href], button, input, textarea, select, summary):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Type utilities
+   -------------------------------------------------------------------------- */
+
+.t-title-100 {
+  font-family: var(--font-display);
+  font-size: var(--title-100);
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: normal;
+}
+.t-title-60,
+.t-title-40,
+.t-title-20,
+.t-title-10 {
+  font-family: var(--font-serif);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.t-title-60 {
+  font-size: var(--title-60);
+}
+.t-title-40 {
+  font-size: var(--title-40);
+}
+.t-title-20 {
+  font-size: var(--title-20);
+}
+.t-title-10 {
+  font-size: var(--title-10);
+}
+
+.t-subtitle-30 {
+  font-size: var(--subtitle-30);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+.t-subtitle-20 {
+  font-size: var(--subtitle-20);
+  line-height: 1.3;
+}
+.t-body-30 {
+  font-size: var(--body-30);
+  line-height: 1.3;
+}
+.t-body-20 {
+  font-size: var(--body-20);
+  line-height: 1.3;
+}
+.t-caption-30 {
+  font-size: var(--caption-30);
+  line-height: 1.3;
+}
+
+.serif {
+  font-family: var(--font-serif);
+}
+.up {
+  text-transform: uppercase;
+}
+.center {
+  text-align: center;
+}
+.dim {
+  opacity: 0.6;
+}
+.dim-70 {
+  opacity: 0.7;
+}
+.prewrap {
+  white-space: pre-line;
+}
+.balance {
+  text-wrap: balance;
+}
+
+/* Prose — the only place the serif runs lowercase. */
+.prose {
+  font-size: var(--subtitle-20);
+  line-height: 1.45;
+}
+.prose > * + * {
+  margin-top: 1em;
+}
+.prose em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.15em;
+}
+
+/* --------------------------------------------------------------------------
+   Layout primitives
+   -------------------------------------------------------------------------- */
+
+.pad {
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: var(--section-y);
+  padding-inline: var(--gutter);
+}
+/* A section that continues the one above it: no top padding, so the two read
+   as a single block rather than two with a seam of dead space between them. */
+.section--tight-top {
+  padding-top: 0;
+}
+
+/* Vertical rhythm helpers, so pages never carry inline pixel margins. */
+.mt-sm { margin-top: var(--space-sm); }
+.mt-md { margin-top: var(--space-md); }
+.mt-lg { margin-top: var(--space-lg); }
+.mt-xl { margin-top: var(--space-xl); }
+.mt-2xl { margin-top: var(--space-2xl); }
+
+.mb-sm { margin-bottom: var(--space-sm); }
+.mb-md { margin-bottom: var(--space-md); }
+.mb-lg { margin-bottom: var(--space-lg); }
+.mb-xl { margin-bottom: var(--space-xl); }
+
+.gap-3xs { gap: var(--space-3xs); }
+.gap-2xs { gap: var(--space-2xs); }
+.gap-xs { gap: var(--space-xs); }
+.gap-sm { gap: var(--space-sm); }
+.gap-md { gap: var(--space-md); }
+.gap-lg { gap: var(--space-lg); }
+.gap-xl { gap: var(--space-xl); }
+
+.measure {
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+
+.on-primary {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.on-secondary {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+.on-accent {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.hairline {
+  border: 0;
+  border-top: 1px solid currentColor;
+  opacity: 0.3;
+  margin: 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 12px 16px;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.skip-link:focus {
+  left: 8px;
+  top: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   Page transitions
+
+   Next runs navigations through `document.startViewTransition`, so the whole
+   outgoing page cross-fades and settles while the incoming one rises into
+   place. Anything with its own `view-transition-name` is animated separately —
+   the navigation bar is pinned so it does not flicker between routes.
+   -------------------------------------------------------------------------- */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 520ms;
+  animation-timing-function: var(--ease);
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  animation-name: page-out;
+}
+::view-transition-new(root) {
+  animation-name: page-in;
+}
+
+@keyframes page-out {
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+/* The bar is the one element that must not move between pages: it holds its
+   position and only cross-fades, so a change of page theme does not snap. */
+::view-transition-group(nav) {
+  animation: none;
+}
+::view-transition-image-pair(nav) {
+  isolation: auto;
+}
+::view-transition-old(nav),
+::view-transition-new(nav) {
+  animation-duration: 320ms;
+  animation-timing-function: var(--ease);
+  mix-blend-mode: normal;
+}
+
+/* --------------------------------------------------------------------------
+   Motion
+   -------------------------------------------------------------------------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 800ms var(--ease),
+    transform 800ms var(--ease);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

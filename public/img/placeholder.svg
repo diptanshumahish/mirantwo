@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800" role="img" aria-label="Image pending">
+  <rect width="800" height="800" fill="#f3f0e4"/>
+  <g stroke="#101010" stroke-opacity="0.14" stroke-width="1">
+    <path d="M0 400h800M400 0v800"/>
+    <circle cx="400" cy="400" r="150" fill="none"/>
+  </g>
+  <path d="M340 460V340l60 54 60-54v120" fill="none" stroke="#101010" stroke-opacity="0.28" stroke-width="6" stroke-linecap="square"/>
+</svg>

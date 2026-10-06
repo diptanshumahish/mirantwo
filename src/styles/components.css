@@ -1,0 +1,1264 @@
+/* ==========================================================================
+   Mirania II — components
+
+   Five motifs carry the whole site:
+     1. a segmented nav bar whose blocks round off and turn honey on hover
+     2. oversized honey marquee type sitting behind every headline
+     3. link rows that fill with a curtain wiping down from above
+     4. images that overscan their frame and drift against the scroll
+     5. 4:5 cards on an 8px gutter, captioned in two lines
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Navigation
+   -------------------------------------------------------------------------- */
+
+.nav {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 40;
+  /* Pinned across route changes so it does not flicker mid view-transition. */
+  view-transition-name: nav;
+}
+
+.nav__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  height: var(--nav-h);
+  padding-inline: var(--gutter);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+}
+
+/* -- Lockup ---------------------------------------------------------------- */
+
+.nav__brand {
+  flex: none;
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+
+.lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lockup__mark {
+  width: 34px;
+  height: auto;
+  flex: none;
+}
+.lockup__type {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+.lockup__name {
+  font-family: var(--font-serif);
+  font-size: 21px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.lockup__sub {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin-top: 3px;
+}
+
+/* -- Links ----------------------------------------------------------------- */
+
+.nav__links {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .nav__links {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+}
+
+.nav__link {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  padding-inline: 16px;
+  border-radius: 999px;
+  font-size: var(--body-20);
+  white-space: nowrap;
+  transition:
+    background var(--dur) ease-in-out,
+    color var(--dur) ease-in-out;
+}
+@media (hover: hover) {
+  .nav__link:hover {
+    background: color-mix(in srgb, currentColor 10%, transparent);
+  }
+}
+.nav__link[data-active="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* -- Contact CTA ----------------------------------------------------------- */
+
+.nav__cta {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .nav__cta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 36px;
+    padding: 0 6px 0 16px;
+    border-radius: 999px;
+    background: var(--text-secondary);
+    color: var(--bg-secondary);
+    font-size: var(--body-20);
+    white-space: nowrap;
+    transition:
+      background var(--dur) ease-in-out,
+      color var(--dur) ease-in-out;
+  }
+}
+.nav__cta-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 20%, transparent);
+  transition: transform var(--dur) var(--ease);
+}
+@media (hover: hover) {
+  .nav__cta:hover {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  .nav__cta:hover .nav__cta-icon {
+    transform: translateX(3px);
+  }
+}
+.nav__cta[data-active="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* -- Mobile ---------------------------------------------------------------- */
+
+.nav__toggle {
+  flex: none;
+  display: flex;
+  align-items: center;
+  height: 36px;
+  padding-inline: 16px;
+  border-radius: 999px;
+  background: var(--text-secondary);
+  color: var(--bg-secondary);
+  font-size: var(--body-20);
+}
+@media (min-width: 1024px) {
+  .nav__toggle {
+    display: none;
+  }
+}
+
+.nav__panel {
+  position: fixed;
+  inset: var(--nav-h) 0 0;
+  /* Belt and braces: the panel is mobile-only even when left open by a resize. */
+  z-index: -1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--gutter);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.nav__panel nav {
+  display: flex;
+  flex-direction: column;
+}
+.nav__panel a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: var(--space-sm) 0;
+  border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  font-family: var(--font-serif);
+  font-size: var(--title-10);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  animation: panel-item 420ms var(--ease) both;
+  animation-delay: calc(var(--i) * 45ms);
+}
+.nav__panel a[data-active="true"] {
+  color: var(--accent);
+}
+
+@keyframes panel-item {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav__panel {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. Marquee
+   -------------------------------------------------------------------------- */
+
+.marquee {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  pointer-events: none;
+}
+.marquee__track {
+  display: flex;
+  flex: none;
+  min-width: 100%;
+  animation: marquee-scroll var(--marquee-dur, 44s) linear infinite;
+}
+.marquee__track > span {
+  flex: none;
+  padding-right: 80px;
+  white-space: nowrap;
+}
+.marquee--reverse .marquee__track {
+  animation-direction: reverse;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+/* The signature: honey display type at 250–580px, parked behind a headline. */
+.marquee--display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--title-100);
+  line-height: 1;
+  color: var(--accent);
+}
+.marquee--display .marquee__track > span {
+  padding-block: 80px;
+}
+
+.marquee-bed {
+  position: absolute;
+  inset-inline: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.marquee-bed--center {
+  top: 50%;
+  transform: translateY(-50%);
+}
+/* Inside a statement the band is already absolutely placed, so it carries no
+   margin of its own. */
+.marquee-bed--center .marquee-band {
+  margin-top: 0;
+}
+/* In-flow crop of the display marquee: the letters are cut off top and bottom
+   by the band, which is what gives the reference its cropped-poster feel. */
+/* The crop is sized from the type, not from a fixed pixel height: 0.62em of a
+   0.7em cap height shows almost the whole letter and cuts it just above the
+   baseline, which is the cropped-poster effect the band exists for. */
+.marquee-band {
+  position: relative;
+  height: calc(var(--title-100) * 0.62);
+  margin-top: var(--space-lg);
+  overflow: hidden;
+}
+.marquee-band .marquee {
+  position: absolute;
+  inset-inline: 0;
+  /* Cancel the marquee's 80px block padding, then drop the cap top (0.15em
+     below the line-box top in this face) onto the top of the crop. */
+  top: calc(-80px - 0.15em);
+}
+
+/* --------------------------------------------------------------------------
+   3. Link rows — a curtain wipes down from above and the label steps aside
+   -------------------------------------------------------------------------- */
+
+.linkrow {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 42px;
+  width: 100%;
+  min-width: 0;
+  height: 42px;
+  padding-block: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+  border-top: 1px solid currentColor;
+  font-size: var(--subtitle-20);
+  transition: color var(--dur) ease-in-out;
+}
+.linkrow__curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  transform: translateY(-100%);
+  transition: transform var(--dur) var(--ease);
+  background: var(--curtain, var(--text-primary));
+}
+.linkrow__label,
+.linkrow__icon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  transition: transform var(--dur) ease-in-out;
+}
+.linkrow__icon {
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 20%, transparent);
+}
+@media (hover: hover) {
+  .linkrow:hover .linkrow__curtain {
+    transform: translateY(0);
+  }
+  .linkrow:hover .linkrow__label {
+    transform: translateX(8px);
+  }
+  .linkrow:hover .linkrow__icon {
+    transform: translateX(-8px);
+  }
+}
+
+/* On a primary (dark) surface the curtain is the light text colour. */
+.on-primary .linkrow,
+.linkrow--on-primary {
+  --curtain: var(--text-primary);
+}
+.on-primary .linkrow:hover,
+.linkrow--on-primary:hover {
+  color: var(--bg-primary);
+}
+/* On a secondary (light) surface it is the dark text colour. */
+.on-secondary .linkrow,
+.linkrow--on-secondary {
+  --curtain: var(--text-secondary);
+}
+.on-secondary .linkrow:hover,
+.linkrow--on-secondary:hover {
+  color: var(--bg-secondary);
+}
+.linkrow--accent {
+  --curtain: var(--accent);
+}
+.linkrow--accent:hover {
+  color: var(--on-accent);
+}
+
+/* A solid chip version, used in the footer and on forms. */
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 42px;
+  padding-inline: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--body-20);
+  border: 0;
+  border-radius: 0;
+  transition:
+    border-radius var(--dur) ease-in-out,
+    background var(--dur) ease-in-out,
+    color var(--dur) ease-in-out;
+}
+@media (hover: hover) {
+  .chip:hover {
+    border-radius: 21px;
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+}
+.chip:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   4. Media — parallax frames
+   -------------------------------------------------------------------------- */
+
+.frame {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+.frame__inner {
+  position: absolute;
+  inset: 0;
+  /* Overscan top and bottom so the image can drift without exposing an edge. */
+  height: calc(100% + 2 * var(--overscan, 30px));
+  top: calc(-1 * var(--overscan, 30px));
+}
+@media (min-width: 1024px) {
+  .frame__inner {
+    --overscan: 80px;
+  }
+}
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Catalogue cut-outs sit on their own plate. `isolation` keeps the multiply
+   blending against that plate rather than against whatever section is below,
+   so the same shot reads correctly on a dark and a light surface alike. */
+.frame--contain {
+  background: var(--bg-secondary);
+  isolation: isolate;
+}
+.frame--contain img {
+  object-fit: contain;
+  /* Catalogue photography ships on white; multiply drops that ground into the
+     warm surface instead of stamping a white card onto it. */
+  mix-blend-mode: multiply;
+}
+
+.frame__zoom {
+  transition: transform 600ms ease-in-out;
+}
+@media (min-width: 1024px) {
+  .frame__zoom {
+    transform: scale(1.02);
+  }
+  .card:hover .frame__zoom {
+    transform: scale(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. Cards & grids
+   -------------------------------------------------------------------------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: var(--space-xl);
+}
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: var(--gutter);
+  }
+}
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: var(--space-2xl);
+  }
+}
+.grid--2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: var(--space-xl);
+}
+@media (min-width: 768px) {
+  .grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: var(--gutter);
+  }
+}
+.grid--4 {
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: var(--gutter);
+  row-gap: var(--space-md);
+}
+@media (min-width: 1024px) {
+  .grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: var(--space-xl);
+  }
+}
+
+.card {
+  position: relative;
+  display: block;
+  isolation: isolate;
+}
+.card__caption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+  padding-top: var(--space-xs);
+}
+.card__title {
+  font-size: var(--body-30);
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.card__meta {
+  font-size: var(--body-20);
+  opacity: 0.6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Hero
+   -------------------------------------------------------------------------- */
+
+.hero__plate {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-md) var(--gutter) var(--space-sm);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+@media (min-width: 1024px) {
+  .hero__plate {
+    padding-bottom: var(--space-xs);
+  }
+}
+
+/* Letters spaced edge to edge, so the wordmark is always exactly full-bleed
+   whatever the viewport. */
+.wordmark-xl {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-display);
+  font-weight: 500;
+  /* 21vw keeps the packed width just inside the container at every viewport
+     (measured), so `space-between` only ever opens a hairline gap instead of
+     shrinking the glyph boxes into each other. */
+  font-size: 21vw;
+  line-height: 0.8;
+  letter-spacing: 0;
+}
+.wordmark-xl > span {
+  display: block;
+  flex: none;
+}
+
+.hero__lines {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-xl);
+  margin-top: var(--space-xs);
+}
+.hero__lines p {
+  font-family: var(--font-serif);
+  font-size: var(--title-10);
+  text-transform: uppercase;
+  white-space: pre-line;
+  line-height: 1.05;
+}
+
+.hero__stage {
+  position: relative;
+  isolation: isolate;
+  height: 80svh;
+}
+@media (min-width: 1024px) {
+  .hero__stage {
+    height: 100svh;
+  }
+}
+.hero__slide {
+  position: absolute;
+  inset: 0;
+  transition: clip-path 1000ms var(--ease);
+}
+.hero__seam {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 10;
+  height: 4px;
+  background: color-mix(in srgb, var(--text-primary) 30%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+   Feature panel — a full-bleed image with a caption grid laid over it
+   -------------------------------------------------------------------------- */
+
+.feature {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 70svh;
+  padding: 24px 8px;
+  color: var(--text-primary);
+}
+@media (min-width: 1024px) {
+  .feature {
+    min-height: 100svh;
+    padding-inline: 24px;
+  }
+}
+.feature__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(
+      to top,
+      color-mix(in srgb, var(--base-dark-brown) 72%, transparent) 0%,
+      transparent 55%
+    ),
+    color-mix(in srgb, var(--base-dark-brown) 46%, transparent);
+}
+.feature__grid {
+  display: grid;
+  flex: 1;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 24px;
+  padding-top: 24px;
+  border-top: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+   Banner — a bordered plate floating on a photograph
+   -------------------------------------------------------------------------- */
+
+.banner {
+  position: relative;
+  isolation: isolate;
+  padding: var(--section-y) var(--gutter);
+}
+.banner__grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 1024px) {
+  .banner__grid {
+    grid-template-columns: repeat(12, 1fr);
+  }
+  .banner__plate {
+    grid-column: 2 / span 10;
+  }
+}
+.banner__plate {
+  padding: 16px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+
+.foot {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 8px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.foot__cols {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: 16px;
+  padding-top: 48px;
+}
+@media (min-width: 1024px) {
+  .foot__cols {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.foot__links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+@media (min-width: 1024px) {
+  .foot__links {
+    margin-bottom: 0;
+  }
+}
+.foot__links div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.foot__links a {
+  font-size: var(--subtitle-20);
+  opacity: 0.6;
+  transition: opacity var(--dur) ease-in-out;
+}
+.foot__links a:hover {
+  opacity: 1;
+}
+.foot__reach {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  padding-top: 24px;
+  border-top: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}
+@media (min-width: 1024px) {
+  .foot__reach {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding-top: 0;
+    border-top: 0;
+  }
+}
+.foot__addresses {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: 16px;
+  row-gap: 24px;
+  padding-top: 24px;
+  border-top: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}
+@media (min-width: 1024px) {
+  .foot__addresses {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.foot__legal {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}
+@media (min-width: 1024px) {
+  .foot__legal {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+  }
+}
+.foot a.muted-link {
+  opacity: 0.6;
+  transition: opacity var(--dur) ease-in-out;
+}
+.foot a.muted-link:hover {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Forms
+   -------------------------------------------------------------------------- */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+}
+.field label {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3xs);
+  font-size: var(--body-20);
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.field__req {
+  font-size: 0.75em;
+  letter-spacing: 0.08em;
+  opacity: 0.6;
+}
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 14px 14px;
+  /* A filled well rather than a bare underline: on a warm mid-tone ground a
+     hairline rule reads as a wireframe, not as somewhere to type. */
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  color: inherit;
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+  border-radius: 2px;
+  font-size: var(--subtitle-20);
+  transition:
+    border-color var(--dur) ease-in-out,
+    background var(--dur) ease-in-out;
+}
+.field select {
+  appearance: none;
+  padding-right: 40px;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 20px) calc(50% + 1px),
+    calc(100% - 14px) calc(50% + 1px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+.field input:hover,
+.field textarea:hover,
+.field select:hover {
+  border-color: color-mix(in srgb, currentColor 38%, transparent);
+}
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+.field textarea {
+  resize: vertical;
+  min-height: 132px;
+}
+.field input::placeholder,
+.field textarea::placeholder {
+  color: currentColor;
+  opacity: 0.45;
+}
+
+/* --------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  height: 48px;
+  padding: 0 8px 0 20px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+  font-size: var(--body-30);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--dur) ease-in-out,
+    color var(--dur) ease-in-out,
+    border-color var(--dur) ease-in-out,
+    opacity var(--dur) ease-in-out;
+}
+.btn__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 18%, transparent);
+  transition: transform var(--dur) var(--ease);
+}
+@media (hover: hover) {
+  .btn:hover .btn__icon {
+    transform: translateX(3px);
+  }
+  .btn:hover {
+    border-color: currentColor;
+  }
+}
+.btn--solid {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+}
+@media (hover: hover) {
+  .btn--solid:hover {
+    background: var(--on-accent);
+    color: var(--accent);
+    border-color: var(--on-accent);
+  }
+}
+/* Not `disabled`: the link stays legible and the reason sits beside it, rather
+   than presenting a broken-looking control the moment the page loads. */
+.btn[aria-disabled="true"] {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Contact page
+   -------------------------------------------------------------------------- */
+
+/* A panel of the opposite surface, used to lift the form off the page. */
+.panel {
+  padding: var(--space-lg) var(--space-md);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+@media (min-width: 768px) {
+  .panel {
+    padding: var(--space-xl) var(--space-lg);
+  }
+}
+
+.contact-lead {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+@media (min-width: 1024px) {
+  .contact-lead {
+    grid-template-columns: 1.55fr 1fr;
+    gap: var(--gutter);
+  }
+}
+
+.three-up {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+}
+@media (min-width: 768px) {
+  .three-up {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+}
+.three-up > * {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  padding-top: var(--space-xs);
+  border-top: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}
+
+/* Live open/closed indicator. */
+.opennow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3xs);
+  font-size: var(--body-30);
+}
+.opennow__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  flex: none;
+  background: color-mix(in srgb, currentColor 40%, transparent);
+}
+.opennow__dot[data-open="true"] {
+  background: #2f7d4f;
+  box-shadow: 0 0 0 4px color-mix(in srgb, #2f7d4f 22%, transparent);
+}
+.opennow__dot[data-open="false"] {
+  background: color-mix(in srgb, currentColor 45%, transparent);
+}
+.opennow__time {
+  opacity: 0.55;
+  margin-left: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Filter pills — collection and brand navigation
+   -------------------------------------------------------------------------- */
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding-inline: 14px;
+  border-radius: 0;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  font-size: var(--body-20);
+  transition:
+    border-radius var(--dur) ease-in-out,
+    background var(--dur) ease-in-out,
+    color var(--dur) ease-in-out;
+}
+@media (hover: hover) {
+  .pill:hover {
+    border-radius: 17px;
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+}
+.pill[data-active="true"] {
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.pill sup {
+  font-size: 0.7em;
+  opacity: 0.7;
+}
+
+/* --------------------------------------------------------------------------
+   Shell — per-page theming lives here, so the nav and footer re-skin with the
+   page rather than being stuck on the root palette.
+   -------------------------------------------------------------------------- */
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.shell > main {
+  flex: 1;
+  /* The bar is opaque and in the layout's way, so the page starts under it.
+     On the home page the hero plate shares the bar's surface, so the two read
+     as one block. */
+  padding-top: var(--nav-h);
+}
+
+/* A full-height statement block with the marquee running through its middle. */
+/* A full-height block with the marquee running through its middle.
+   The headline sits at the top and the closing line at the bottom, so the band
+   of display type passes cleanly between them rather than under either. */
+.statement {
+  position: relative;
+  isolation: isolate;
+  padding: var(--section-y) var(--space-sm);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.statement__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-height: calc(100svh - 2 * var(--section-y));
+}
+@media (min-width: 1024px) {
+  .statement__inner {
+    gap: var(--space-sm);
+  }
+}
+.statement__tail {
+  margin-top: auto;
+  padding-top: var(--space-xl);
+}
+
+/* A band of names running edge to edge in the accent colour. */
+.band {
+  padding-block: 24px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+}
+.marquee--band {
+  font-family: var(--font-serif);
+  font-size: var(--title-60);
+  line-height: 1.05;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+.marquee--band .marquee__track > span {
+  padding-right: 48px;
+}
+
+/* Detail pages: a sticky column of specifications beside the photography. */
+.split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+@media (min-width: 1024px) {
+  .split {
+    grid-template-columns: 1.35fr 1fr;
+    gap: var(--gutter);
+    align-items: start;
+  }
+  .split__side {
+    position: sticky;
+    top: calc(var(--nav-h) + var(--space-sm));
+  }
+}
+
+.deflist {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.deflist > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  padding-block: 12px;
+  border-top: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  font-size: var(--body-30);
+}
+.deflist dt {
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+.deflist dd {
+  margin: 0;
+  text-align: right;
+}
+
+/* Page masthead — the top of every interior page. */
+.masthead {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: var(--space-2xl) var(--gutter) var(--space-xl);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+/* Sits between the masthead and the page body, on the same surface, above the
+   marquee that bleeds out of the block above it. */
+.masthead__aside {
+  position: relative;
+  z-index: 1;
+  gap: var(--space-lg);
+  padding: 0 var(--gutter) var(--section-y);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+.masthead__aside > .measure {
+  margin-inline: auto;
+}
+
+/* Only a masthead carrying a marquee needs the deep foot for it to bleed into. */
+.masthead--marquee {
+  padding-bottom: 192px;
+}
+
+.backlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.6;
+  transition: opacity var(--dur) ease-in-out;
+}
+.backlink:hover {
+  opacity: 1;
+}
+.backlink__arrow {
+  display: flex;
+  transform: rotate(180deg);
+}
+
+/* Feature panel: photograph behind the scrim, scrim behind the caption grid. */
+.feature {
+  overflow: hidden;
+}
+.feature__bg {
+  z-index: -2;
+}
+.banner {
+  overflow: hidden;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.form__row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+@media (min-width: 640px) {
+  .form__row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.form__foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-top: var(--space-3xs);
+}
+.form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3xs);
+}
+.form__note {
+  font-size: var(--body-20);
+  opacity: 0.7;
+  max-width: 46ch;
+}
+
+/* The contact page's two-up: form on the left, the standing facts on the right. */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 64px;
+}
+@media (min-width: 1024px) {
+  .contact-grid {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 80px;
+    align-items: start;
+  }
+}
+
+/* In the aside band the definition list has the full page width, so it reads
+   as a row of facts rather than one very stretched pair per line. */
+/* A grid of short text blocks needs less air between rows than a grid of
+   photographs. */
+.grid--text {
+  row-gap: var(--space-lg) !important;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+.row--baseline {
+  align-items: baseline;
+}
+.row--start {
+  align-items: flex-start;
+}
+
+.container {
+  max-width: 1280px;
+  margin-inline: auto;
+}
+
+.pb-gutter {
+  padding-bottom: var(--gutter);
+}
+
+.masthead__aside .deflist {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  column-gap: 48px;
+}
